@@ -1,4 +1,4 @@
-USE mlsjsu;
+USE mlsjsu_db;
 
 -- Semesters
 INSERT INTO Semesters (Term, Year) VALUES

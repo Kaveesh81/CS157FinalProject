@@ -1,9 +1,9 @@
 -- Drop database if it already exists
-DROP DATABASE IF EXISTS mlsjsu;
+DROP DATABASE IF EXISTS mlsjsu_db;
 
 -- Create and use new database
-CREATE DATABASE mlsjsu;
-USE mlsjsu;
+CREATE DATABASE mlsjsu_db;
+USE mlsjsu_db;
 
 -- Table: Semesters
 CREATE TABLE Semesters (
