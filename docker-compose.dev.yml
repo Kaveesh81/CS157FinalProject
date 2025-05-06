@@ -1,5 +1,7 @@
 services:
-  backend:
+  # TODO: Add nginx, frontend
+
+  server:
     build:
       context: ./server
       dockerfile: Dockerfile

@@ -1,14 +1,14 @@
 USE mlsjsu_db;
 
 -- Semesters
-INSERT INTO Semesters (Term, Year) VALUES
+INSERT INTO semesters (term, year) VALUES
 ('Spring', 2024), ('Fall', 2023), ('Spring', 2023), ('Fall', 2022),
 ('Spring', 2022), ('Fall', 2021), ('Spring', 2021), ('Fall', 2020),
 ('Spring', 2020), ('Fall', 2019), ('Spring', 2019), ('Fall', 2018),
 ('Spring', 2018), ('Fall', 2017), ('Spring', 2017);
 
 -- Members
-INSERT INTO Members (Name, Email, LinkedIn, GradDate, Role, StartDate) VALUES
+INSERT INTO users (name, email, linkedin, grad_date, role, start_date) VALUES
 ('Alice Zhang', 'alice@sjsu.edu', 'linkedin.com/alice', '2025-05-01', 'General', '2023-01-10'),
 ('Bob Kumar', 'bob@sjsu.edu', 'linkedin.com/bob', '2024-12-01', 'Project', '2022-08-20'),
 ('Carlos Lee', 'carlos@sjsu.edu', 'linkedin.com/carlos', '2025-05-01', 'Lead', '2022-01-15'),
@@ -26,7 +26,7 @@ INSERT INTO Members (Name, Email, LinkedIn, GradDate, Role, StartDate) VALUES
 ('Oscar Ray', 'oscar@sjsu.edu', 'linkedin.com/oscar', '2026-12-01', 'General', '2024-01-10');
 
 -- Projects
-INSERT INTO Projects (Title, Description, Topic, SemesterID, ProjectLeadID, GitHubLink, SpotsAvailable) VALUES
+INSERT INTO projects (title, description, topic, semester_id, project_lead_id, github_link, spots_available) VALUES
 ('AI for Healthcare', 'A project applying ML to healthcare diagnostics.', 'Healthcare AI', 1, 3, 'https://github.com/mlsjsu/ai-health', 5),
 ('NLP Chatbot', 'Natural Language chatbot for student Q&A.', 'NLP', 2, 8, 'https://github.com/mlsjsu/nlp-chatbot', 4),
 ('CV for Wildlife', 'Image classification for endangered species.', 'Computer Vision', 3, 13, 'https://github.com/mlsjsu/cv-wildlife', 6),
@@ -39,7 +39,7 @@ INSERT INTO Projects (Title, Description, Topic, SemesterID, ProjectLeadID, GitH
 ('Project Showcase Portal', 'Web portal to display ML@SJSU projects.', 'Web Dev', 1, 9, 'https://github.com/mlsjsu/showcase-portal', 5);
 
 -- ProjectMemberships
-INSERT INTO ProjectMemberships (MemberID, ProjectID, Role) VALUES
+INSERT INTO project_memberships (user_id, project_id, role) VALUES
 (1, 1, 'Member'), (2, 1, 'Member'), (5, 1, 'Member'), (6, 2, 'Member'), (7, 2, 'Member'),
 (10, 2, 'Member'), (11, 3, 'Member'), (12, 3, 'Member'), (14, 3, 'Member'), (1, 4, 'Member'),
 (2, 5, 'Member'), (5, 5, 'Member'), (6, 5, 'Member'), (10, 6, 'Member'), (11, 6, 'Member'),

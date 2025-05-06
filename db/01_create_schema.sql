@@ -1,4 +1,5 @@
 -- Drop database if it already exists
+-- Required to make create_schema.sql idempotent
 DROP DATABASE IF EXISTS mlsjsu_db;
 
 -- Create and use new database
@@ -6,45 +7,49 @@ CREATE DATABASE mlsjsu_db;
 USE mlsjsu_db;
 
 -- Table: Semesters
-CREATE TABLE Semesters (
-    SemesterID INT PRIMARY KEY AUTO_INCREMENT,
-    Term VARCHAR(10) NOT NULL,       -- e.g., Fall, Spring
-    Year INT NOT NULL
+CREATE TABLE semesters (
+    semester_id     INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    term            ENUM('Spring', 'Summer', 'Fall', 'Winter') NOT NULL,
+    year            YEAR NOT NULL,
+    CONSTRAINT unique_semester UNIQUE (term, year)
 );
 
--- Table: Members
-CREATE TABLE Members (
-    MemberID INT PRIMARY KEY AUTO_INCREMENT,
-    Name VARCHAR(100) NOT NULL,
-    Email VARCHAR(100) NOT NULL UNIQUE,
-    LinkedIn VARCHAR(255) NOT NULL,
-    GradDate DATE NOT NULL,
-    Role ENUM('General', 'Project', 'Lead', 'Manager') NOT NULL,
-    StartDate DATE NOT NULL
+-- Table: Users
+CREATE TABLE users (
+    user_id         INT AUTO_INCREMENT PRIMARY KEY,
+    name            VARCHAR(100) NOT NULL,
+    email           VARCHAR(100) NOT NULL UNIQUE,
+    linkedin        VARCHAR(255) NOT NULL UNIQUE,
+    grad_date       DATE NOT NULL,
+    role            ENUM('General', 'Project', 'Lead', 'Manager') NOT NULL DEFAULT 'General',
+    start_date      DATE NOT NULL,
+    is_manager      BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 -- Table: Projects
-CREATE TABLE Projects (
-    ProjectID INT PRIMARY KEY AUTO_INCREMENT,
-    Title VARCHAR(150) NOT NULL,
-    Description TEXT NOT NULL,
-    Topic VARCHAR(100) NOT NULL,
-    SemesterID INT NOT NULL,
-    ProjectLeadID INT NOT NULL,
-    GitHubLink VARCHAR(255) NOT NULL,
-    SpotsAvailable INT NOT NULL CHECK (SpotsAvailable >= 0),
+CREATE TABLE projects (
+    project_id      INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    title           VARCHAR(150) NOT NULL,
+    description     TEXT NOT NULL,
+    topic           VARCHAR(100) NOT NULL,
+    semester_id     INT NOT NULL, -- TODO: Consider projects that span multiple semesters
+    project_lead_id INT NOT NULL,
+    github_link     VARCHAR(255) NOT NULL,
+    spots_available INT NOT NULL CHECK (spots_available >= 0),
+    is_approved     BOOLEAN NOT NULL DEFAULT FALSE,
     
-    FOREIGN KEY (SemesterID) REFERENCES Semesters(SemesterID) ON DELETE CASCADE,
-    FOREIGN KEY (ProjectLeadID) REFERENCES Members(MemberID) ON DELETE CASCADE
+    FOREIGN KEY (semester_id) REFERENCES semesters(semester_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (project_lead_id) REFERENCES members(member_id) ON DELETE RESTRICT ON UPDATE CASCADE,
 );
 
--- Table: ProjectMemberships (Many-to-Many)
-CREATE TABLE ProjectMemberships (
-    MemberID INT NOT NULL,
-    ProjectID INT NOT NULL,
-    Role ENUM('Member', 'Lead', 'Manager') NOT NULL,
-    PRIMARY KEY (MemberID, ProjectID),
-
-    FOREIGN KEY (MemberID) REFERENCES Members(MemberID) ON DELETE CASCADE,
-    FOREIGN KEY (ProjectID) REFERENCES Projects(ProjectID) ON DELETE CASCADE
+-- Table: project-membership (Many-to-Many)
+CREATE TABLE project_memberships (
+    user_id         INT NOT NULL,
+    project_id      INT NOT NULL,
+    role            ENUM('Member', 'Lead') NOT NULL DEFAULT 'Member',
+    status          ENUM('Pending', 'Approved', 'Rejected') NOT NULL DEFAULT 'Pending',
+    
+    PRIMARY KEY (user_id, project_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
