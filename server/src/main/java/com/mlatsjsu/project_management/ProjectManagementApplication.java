@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class ProjectManagementApplication {
 
 	@GetMapping("/")
-	public String helloWorld() {
-		return "Hello, World!";
+	public String index() {
+		return "";
 	}
 
 	public static void main(String[] args) {

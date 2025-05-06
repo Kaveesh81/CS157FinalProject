@@ -1,10 +1,10 @@
 -- Drop database if it already exists
 -- Required to make create_schema.sql idempotent
-DROP DATABASE IF EXISTS mlsjsu_db;
+DROP DATABASE IF EXISTS mlatsjsu_db;
 
 -- Create and use new database
-CREATE DATABASE mlsjsu_db;
-USE mlsjsu_db;
+CREATE DATABASE mlatsjsu_db;
+USE mlatsjsu_db;
 
 -- Table: Semesters
 CREATE TABLE semesters (
@@ -39,7 +39,7 @@ CREATE TABLE projects (
     is_approved     BOOLEAN NOT NULL DEFAULT FALSE,
     
     FOREIGN KEY (semester_id) REFERENCES semesters(semester_id) ON DELETE RESTRICT ON UPDATE CASCADE,
-    FOREIGN KEY (project_lead_id) REFERENCES members(member_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (project_lead_id) REFERENCES users(user_id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- Table: project-membership (Many-to-Many)
