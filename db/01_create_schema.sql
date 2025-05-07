@@ -32,7 +32,7 @@ CREATE TABLE projects (
     title           VARCHAR(150) NOT NULL,
     description     TEXT NOT NULL,
     topic           VARCHAR(100) NOT NULL,
-    semester_id     INT NOT NULL, -- TODO: Consider projects that span multiple semesters
+    semester_id     INT NOT NULL,
     project_lead_id INT NOT NULL,
     github_link     VARCHAR(255) NOT NULL,
     spots_available INT NOT NULL CHECK (spots_available >= 0),

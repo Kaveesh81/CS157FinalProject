@@ -2,8 +2,9 @@ CS 157A Final Project
 
 ### Development setup
 ```bash
-cd backend
+cd server
 ./gradlew bootJar
+cd ..
 docker compose -f docker-compose.dev.yml up --build
 ...
 ```
