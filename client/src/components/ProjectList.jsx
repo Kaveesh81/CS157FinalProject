@@ -1,73 +1,87 @@
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
+import React, { useState, useEffect } from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Typography,
+  CircularProgress,
+  Alert,
+} from "@mui/material";
+import { projectService } from "../services/projectService";
 
-export default function ProjectList({ projects, currentSemester }) {
-  const currentProjects = projects.filter(p => p.semester === currentSemester);
-  const pastProjects = projects.filter(p => p.semester !== currentSemester);
+const ProjectList = () => {
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const data = await projectService.getAllProjects();
+        setProjects(data);
+        setError(null);
+      } catch (err) {
+        setError("Failed to fetch projects. Please try again later.");
+        console.error("Error fetching projects:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, []);
+
+  if (loading) {
+    return (
+      <div
+        style={{ display: "flex", justifyContent: "center", padding: "2rem" }}
+      >
+        <CircularProgress />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <Alert severity="error" sx={{ margin: "1rem" }}>
+        {error}
+      </Alert>
+    );
+  }
 
   return (
-    <Box>
-      <Typography variant="h6" gutterBottom>
-        Current Projects ({currentSemester})
+    <div style={{ padding: "1rem" }}>
+      <Typography variant="h4" gutterBottom>
+        Projects
       </Typography>
-      <Grid container spacing={2}>
-        {currentProjects.length > 0 ? (
-          currentProjects.map((proj, idx) => (
-            <Grid item xs={12} md={6} key={proj.title + idx}>
-              <Card variant="outlined">
-                <CardContent>
-                  <Typography variant="h6">{proj.title}</Typography>
-                  <Typography variant="body2" color="textSecondary" sx={{ mb: 1 }}>
-                    Topic: {proj.topic} • Semester: {proj.semester}
-                  </Typography>
-                  <Typography variant="body2">Lead: {proj.lead}</Typography>
-                  <Typography variant="body2">
-                    GitHub: <Link href={proj.github} target="_blank">{proj.github}</Link>
-                  </Typography>
-                  <Typography variant="body2">
-                    Spots available: {proj.spots}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))
-        ) : (
-          <Typography>No current projects available.</Typography>
-        )}
-      </Grid>
-
-      <Typography variant="h6" gutterBottom sx={{ mt: 4 }}>
-        Past Projects
-      </Typography>
-      <Grid container spacing={2}>
-        {pastProjects.length > 0 ? (
-          pastProjects.map((proj, idx) => (
-            <Grid item xs={12} md={6} key={proj.title + idx}>
-              <Card variant="outlined" sx={{ bgcolor: 'grey.100' }}>
-                <CardContent>
-                  <Typography variant="h6">{proj.title}</Typography>
-                  <Typography variant="body2" color="textSecondary" sx={{ mb: 1 }}>
-                    Topic: {proj.topic} • Semester: {proj.semester}
-                  </Typography>
-                  <Typography variant="body2">Lead: {proj.lead}</Typography>
-                  <Typography variant="body2">
-                    GitHub: <Link href={proj.github} target="_blank">{proj.github}</Link>
-                  </Typography>
-                  <Typography variant="body2">
-                    Spots available: {proj.spots}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))
-        ) : (
-          <Typography>No past projects.</Typography>
-        )}
-      </Grid>
-    </Box>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>ID</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Description</TableCell>
+              <TableCell>Status</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {projects.map((project) => (
+              <TableRow key={project.id}>
+                <TableCell>{project.id}</TableCell>
+                <TableCell>{project.name}</TableCell>
+                <TableCell>{project.description}</TableCell>
+                <TableCell>{project.active ? "Active" : "Inactive"}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
   );
-}
+};
+
+export default ProjectList;
