@@ -8,10 +8,8 @@ import lombok.AllArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Membership {
-    private Long membershipId;
     private Long userId;
     private Long projectId;
     private String role;
     private String status;
-    private User user;
 }

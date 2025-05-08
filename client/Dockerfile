@@ -16,7 +16,7 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Expose the port the app will run on
+# Expose vite's default port
 EXPOSE 5173
 
 # Command to run the application

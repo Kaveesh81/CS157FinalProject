@@ -13,7 +13,6 @@ public class User {
     private String email;
     private String linkedin;
     private String gradDate;
-    private String role;
     private String startDate;
     private boolean isManager;
 }

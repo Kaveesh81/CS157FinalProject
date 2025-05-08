@@ -12,7 +12,6 @@ public class Project {
     private String title;
     private String description;
     private String topic;
-    private Semester semester;
     private Long semesterId;
     private Long projectLeadId;
     private String githubLink;

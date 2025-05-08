@@ -21,7 +21,6 @@ CREATE TABLE users (
     email           VARCHAR(100) NOT NULL UNIQUE,
     linkedin        VARCHAR(255) NOT NULL UNIQUE,
     grad_date       DATE NOT NULL,
-    role            ENUM('General', 'Project', 'Lead', 'Manager') NOT NULL DEFAULT 'General',
     start_date      DATE NOT NULL,
     is_manager      BOOLEAN NOT NULL DEFAULT FALSE
 );
