@@ -10,16 +10,15 @@ public abstract class BaseServlet extends HttpServlet {
     @Override
     protected void doOptions(HttpServletRequest request, HttpServletResponse response) {
         setCorsHeaders(request, response);
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 
     protected void setCorsHeaders(HttpServletRequest request, HttpServletResponse response) {
-        String origin = request.getHeader("Origin");
-        if (origin != null && (origin.equals("http://localhost:5173") || origin.equals("http://localhost:5174"))) {
-            response.setHeader("Access-Control-Allow-Origin", origin);
-            response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-            response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-            response.setHeader("Access-Control-Allow-Credentials", "true");
-        }
+        // During development, allow all origins
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "*");
+        response.setHeader("Access-Control-Max-Age", "3600");
     }
 
     protected void sendJsonResponse(HttpServletResponse response, String json) throws IOException {

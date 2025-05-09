@@ -8,6 +8,7 @@ import Signup from './pages/Signup';
 import Projects from './pages/Projects';
 import Admin from './pages/Admin';
 import Members from './components/Members';
+import TestCRUD from './components/TestCRUD';
 
 import { membersData, projectsData } from './data/SampleData';
 
@@ -57,6 +58,7 @@ export default function App() {
             }
           />
           <Route path="/members" element={<Members />} />
+          <Route path="/test-crud" element={<TestCRUD />} />
         </Routes>
       </Container>
     </>

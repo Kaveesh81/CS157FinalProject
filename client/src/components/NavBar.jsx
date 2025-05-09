@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { Link as RouterLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export default function NavBar() {
   return (
@@ -27,6 +28,9 @@ export default function NavBar() {
           </Button>
           <Button color="inherit" component={RouterLink} to="/admin">
             Admin
+          </Button>
+          <Button color="inherit" component={Link} to="/test-crud">
+            Test CRUD
           </Button>
         </Box>
       </Toolbar>
