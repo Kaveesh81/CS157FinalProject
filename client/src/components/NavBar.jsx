@@ -22,6 +22,9 @@ export default function NavBar() {
           <Button color="inherit" component={RouterLink} to="/projects">
             Projects
           </Button>
+          <Button color="inherit" component={RouterLink} to="/members">
+            Members
+          </Button>
           <Button color="inherit" component={RouterLink} to="/admin">
             Admin
           </Button>

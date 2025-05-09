@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import Signup from './pages/Signup';
 import Projects from './pages/Projects';
 import Admin from './pages/Admin';
+import Users from './components/Users';
 
 import { membersData, projectsData } from './data/SampleData';
 
@@ -55,6 +56,7 @@ export default function App() {
               />
             }
           />
+          <Route path="/members" element={<Users />} />
         </Routes>
       </Container>
     </>

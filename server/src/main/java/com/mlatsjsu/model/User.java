@@ -1,8 +1,8 @@
 package com.mlatsjsu.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 
 @Data
 @NoArgsConstructor
@@ -14,5 +14,6 @@ public class User {
     private String linkedin;
     private String gradDate;
     private String startDate;
+    private String role;
     private boolean isManager;
 }
