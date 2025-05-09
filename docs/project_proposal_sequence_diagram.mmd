@@ -1,0 +1,60 @@
+sequenceDiagram
+    actor User
+    actor Manager
+    participant ProjectController
+    participant ProjectService
+    participant MembershipRepository
+    participant ProjectRepository
+    participant Database
+
+    %% Project Proposal Flow
+    User->>ProjectController: POST /api/v1/projects/propose
+    Note over User,ProjectController: ProjectProposalDTO with proposerId
+    ProjectController->>ProjectService: proposeProject(proposal)
+    
+    activate ProjectService
+    ProjectService->>ProjectRepository: save(project)
+    Note over ProjectService: Sets is_approved = false
+    ProjectRepository->>Database: INSERT project
+    Database-->>ProjectRepository: project_id
+    ProjectRepository-->>ProjectService: saved project
+    
+    ProjectService->>MembershipRepository: save(membership)
+    Note over ProjectService: Sets role = LEAD, status = PENDING
+    MembershipRepository->>Database: INSERT membership
+    Database-->>MembershipRepository: success
+    MembershipRepository-->>ProjectService: saved membership
+    ProjectService-->>ProjectController: project
+    deactivate ProjectService
+    
+    ProjectController-->>User: 201 Created (project)
+
+    %% Project Approval Flow
+    Manager->>ProjectController: POST /api/v1/projects/{id}/approve
+    ProjectController->>ProjectService: approveProject(id)
+    
+    activate ProjectService
+    ProjectService->>ProjectRepository: findById(id)
+    ProjectRepository->>Database: SELECT project
+    Database-->>ProjectRepository: project
+    ProjectRepository-->>ProjectService: project
+    
+    ProjectService->>ProjectRepository: update(project)
+    Note over ProjectService: Sets is_approved = true
+    ProjectRepository->>Database: UPDATE project
+    Database-->>ProjectRepository: success
+    
+    ProjectService->>MembershipRepository: findByProjectId(id)
+    MembershipRepository->>Database: SELECT memberships
+    Database-->>MembershipRepository: memberships
+    MembershipRepository-->>ProjectService: memberships
+    
+    ProjectService->>MembershipRepository: update(membership)
+    Note over ProjectService: Sets status = APPROVED for LEAD
+    MembershipRepository->>Database: UPDATE membership
+    Database-->>MembershipRepository: success
+    
+    ProjectService-->>ProjectController: updated project
+    deactivate ProjectService
+    
+    ProjectController-->>Manager: 200 OK (project)

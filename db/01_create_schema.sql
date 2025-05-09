@@ -32,13 +32,11 @@ CREATE TABLE projects (
     description     TEXT NOT NULL,
     topic           VARCHAR(100) NOT NULL,
     semester_id     INT NOT NULL,
-    project_lead_id INT NOT NULL,
     github_link     VARCHAR(255) NOT NULL,
     spots_available INT NOT NULL CHECK (spots_available >= 0),
     is_approved     BOOLEAN NOT NULL DEFAULT FALSE,
     
-    FOREIGN KEY (semester_id) REFERENCES semesters(semester_id) ON DELETE RESTRICT ON UPDATE CASCADE,
-    FOREIGN KEY (project_lead_id) REFERENCES users(user_id) ON DELETE RESTRICT ON UPDATE CASCADE
+    FOREIGN KEY (semester_id) REFERENCES semesters(semester_id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- Table: project-membership (Many-to-Many)

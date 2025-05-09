@@ -7,11 +7,11 @@ import java.util.Optional;
 public interface MembershipService {
     List<Membership> findByProjectId(Long projectId);
 
-    Optional<Membership> findById(Long membershipId);
+    Optional<Membership> findById(Long userId, Long projectId);
 
     Membership create(Membership membership);
 
-    Membership update(Long membershipId, Membership membership);
+    Membership update(Long userId, Long projectId, Membership membership);
 
-    void delete(Long membershipId);
+    void delete(Long userId, Long projectId);
 }

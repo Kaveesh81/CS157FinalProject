@@ -7,11 +7,11 @@ import java.util.Optional;
 public interface MembershipRepository {
     List<Membership> findByProjectId(Long projectId);
 
-    Optional<Membership> findById(Long membershipId);
+    Optional<Membership> findById(Long userId, Long projectId);
 
     Membership save(Membership membership);
 
     int update(Membership membership);
 
-    int deleteById(Long membershipId);
+    int deleteById(Long userId, Long projectId);
 }

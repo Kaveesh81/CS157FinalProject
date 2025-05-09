@@ -1,6 +1,7 @@
 package com.mlatsjsu.service;
 
 import com.mlatsjsu.model.Project;
+import com.mlatsjsu.model.ProjectProposalDTO;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,7 +14,9 @@ public interface ProjectService {
 
     Optional<Project> findById(Long id);
 
-    Project create(Project project);
+    Project proposeProject(ProjectProposalDTO proposal);
+
+    Project approveProject(Long projectId);
 
     Project update(Long id, Project project);
 

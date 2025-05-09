@@ -1,6 +1,7 @@
 package com.mlatsjsu.controller;
 
 import com.mlatsjsu.model.Project;
+import com.mlatsjsu.model.ProjectProposalDTO;
 import com.mlatsjsu.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,10 +36,15 @@ public class ProjectController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public ResponseEntity<Project> createProject(@RequestBody Project project) {
+    @PostMapping("/propose")
+    public ResponseEntity<Project> proposeProject(@RequestBody ProjectProposalDTO proposal) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(projectService.create(project));
+                .body(projectService.proposeProject(proposal));
+    }
+
+    @PostMapping("/{id}/approve")
+    public ResponseEntity<Project> approveProject(@PathVariable Long id) {
+        return ResponseEntity.ok(projectService.approveProject(id));
     }
 
     @PutMapping("/{id}")

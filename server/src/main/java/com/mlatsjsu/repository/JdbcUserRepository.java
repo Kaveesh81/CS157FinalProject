@@ -47,9 +47,9 @@ public class JdbcUserRepository implements UserRepository {
     @Override
     public User save(User user) {
         jdbcTemplate.update(
-                "INSERT INTO users (name, email, linkedin, grad_date, role, start_date, is_manager) VALUES(?,?,?,?,?,?,?)",
+                "INSERT INTO users (name, email, linkedin, grad_date, start_date, is_manager) VALUES(?,?,?,?,?,?)",
                 user.getName(), user.getEmail(), user.getLinkedin(), user.getGradDate(),
-                user.getRole(), user.getStartDate(), user.isManager());
+                user.getStartDate(), user.isManager());
 
         return findByEmail(user.getEmail()).orElseThrow();
     }
@@ -57,9 +57,9 @@ public class JdbcUserRepository implements UserRepository {
     @Override
     public int update(User user) {
         return jdbcTemplate.update(
-                "UPDATE users SET name=?, email=?, linkedin=?, grad_date=?, role=?, start_date=?, is_manager=? WHERE user_id=?",
+                "UPDATE users SET name=?, email=?, linkedin=?, grad_date=?, start_date=?, is_manager=? WHERE user_id=?",
                 user.getName(), user.getEmail(), user.getLinkedin(), user.getGradDate(),
-                user.getRole(), user.getStartDate(), user.isManager(), user.getUserId());
+                user.getStartDate(), user.isManager(), user.getUserId());
     }
 
     @Override

@@ -7,13 +7,12 @@ import lombok.AllArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Project {
-    private Long projectId;
+public class ProjectProposalDTO {
+    private Long proposerId;
     private String title;
     private String description;
     private String topic;
     private Long semesterId;
     private String githubLink;
     private Integer spotsAvailable;
-    private boolean isApproved;
 }

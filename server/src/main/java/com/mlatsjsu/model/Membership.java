@@ -10,6 +10,18 @@ import lombok.AllArgsConstructor;
 public class Membership {
     private Long userId;
     private Long projectId;
-    private String role;
-    private String status;
+    private Role role;
+    private Status status;
+    private User user;
+
+    public enum Role {
+        MEMBER,
+        LEAD
+    }
+
+    public enum Status {
+        PENDING,
+        APPROVED,
+        REJECTED
+    }
 }

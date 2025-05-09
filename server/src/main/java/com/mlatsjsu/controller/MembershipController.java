@@ -21,11 +21,11 @@ public class MembershipController {
         return ResponseEntity.ok(membershipService.findByProjectId(projectId));
     }
 
-    @GetMapping("/{membershipId}")
+    @GetMapping("/{userId}")
     public ResponseEntity<Membership> getMembershipById(
             @PathVariable Long projectId,
-            @PathVariable Long membershipId) {
-        return membershipService.findById(membershipId)
+            @PathVariable Long userId) {
+        return membershipService.findById(userId, projectId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -39,20 +39,21 @@ public class MembershipController {
                 .body(membershipService.create(membership));
     }
 
-    @PutMapping("/{membershipId}")
+    @PutMapping("/{userId}")
     public ResponseEntity<Membership> updateMembership(
             @PathVariable Long projectId,
-            @PathVariable Long membershipId,
+            @PathVariable Long userId,
             @RequestBody Membership membership) {
         membership.setProjectId(projectId);
-        return ResponseEntity.ok(membershipService.update(membershipId, membership));
+        membership.setUserId(userId);
+        return ResponseEntity.ok(membershipService.update(userId, projectId, membership));
     }
 
-    @DeleteMapping("/{membershipId}")
+    @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteMembership(
             @PathVariable Long projectId,
-            @PathVariable Long membershipId) {
-        membershipService.delete(membershipId);
+            @PathVariable Long userId) {
+        membershipService.delete(userId, projectId);
         return ResponseEntity.noContent().build();
     }
 }

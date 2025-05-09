@@ -22,8 +22,8 @@ public class MembershipServiceImpl implements MembershipService {
     }
 
     @Override
-    public Optional<Membership> findById(Long membershipId) {
-        return membershipRepository.findById(membershipId);
+    public Optional<Membership> findById(Long userId, Long projectId) {
+        return membershipRepository.findById(userId, projectId);
     }
 
     @Override
@@ -34,15 +34,16 @@ public class MembershipServiceImpl implements MembershipService {
 
     @Override
     @Transactional
-    public Membership update(Long membershipId, Membership membership) {
-        membership.setMembershipId(membershipId);
+    public Membership update(Long userId, Long projectId, Membership membership) {
+        membership.setUserId(userId);
+        membership.setProjectId(projectId);
         membershipRepository.update(membership);
-        return membershipRepository.findById(membershipId).orElseThrow();
+        return membershipRepository.findById(userId, projectId).orElseThrow();
     }
 
     @Override
     @Transactional
-    public void delete(Long membershipId) {
-        membershipRepository.deleteById(membershipId);
+    public void delete(Long userId, Long projectId) {
+        membershipRepository.deleteById(userId, projectId);
     }
 }

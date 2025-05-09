@@ -1,7 +1,10 @@
 package com.mlatsjsu.service.impl;
 
 import com.mlatsjsu.model.Project;
+import com.mlatsjsu.model.ProjectProposalDTO;
+import com.mlatsjsu.model.Membership;
 import com.mlatsjsu.repository.ProjectRepository;
+import com.mlatsjsu.repository.MembershipRepository;
 import com.mlatsjsu.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,9 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Autowired
     private ProjectRepository projectRepository;
+
+    @Autowired
+    private MembershipRepository membershipRepository;
 
     @Override
     public List<Project> findAll() {
@@ -38,8 +44,52 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     @Transactional
-    public Project create(Project project) {
-        return projectRepository.save(project);
+    public Project proposeProject(ProjectProposalDTO proposal) {
+        // Create project with is_approved = false
+        Project project = new Project();
+        project.setTitle(proposal.getTitle());
+        project.setDescription(proposal.getDescription());
+        project.setTopic(proposal.getTopic());
+        project.setSemesterId(proposal.getSemesterId());
+        project.setGithubLink(proposal.getGithubLink());
+        project.setSpotsAvailable(proposal.getSpotsAvailable());
+        project.setApproved(false);
+
+        Project savedProject = projectRepository.save(project);
+
+        // Create pending lead membership
+        Membership leadMembership = new Membership();
+        leadMembership.setUserId(proposal.getProposerId());
+        leadMembership.setProjectId(savedProject.getProjectId());
+        leadMembership.setRole(Membership.Role.LEAD);
+        leadMembership.setStatus(Membership.Status.PENDING);
+        membershipRepository.save(leadMembership);
+
+        return savedProject;
+    }
+
+    @Override
+    @Transactional
+    public Project approveProject(Long projectId) {
+        // Get project
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new RuntimeException("Project not found"));
+
+        // Update project approval status
+        project.setApproved(true);
+        projectRepository.update(project);
+
+        // Find and approve lead membership
+        List<Membership> memberships = membershipRepository.findByProjectId(projectId);
+        memberships.stream()
+                .filter(m -> m.getRole() == Membership.Role.LEAD)
+                .findFirst()
+                .ifPresent(lead -> {
+                    lead.setStatus(Membership.Status.APPROVED);
+                    membershipRepository.update(lead);
+                });
+
+        return project;
     }
 
     @Override
