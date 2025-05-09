@@ -9,12 +9,22 @@ const Users = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch('http://localhost:8080/api/v1/users');
+        const response = await fetch('http://localhost:8081/mlservlet/api/members', {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Accept': 'application/json',
+          }
+        });
         if (!response.ok) {
           throw new Error('Failed to fetch users');
         }
         const data = await response.json();
-        setUsers(data);
+        if (data.status === 'success') {
+          setUsers(data.members);
+        } else {
+          throw new Error(data.message || 'Failed to fetch users');
+        }
         setLoading(false);
       } catch (err) {
         setError(err.message);
@@ -33,16 +43,11 @@ const Users = () => {
       <h2>ML@SJSU Members</h2>
       <div className="users-grid">
         {users.map((user) => (
-          <div key={user.userId} className="user-card">
+          <div key={user.id} className="user-card">
             <h3>{user.name}</h3>
             <p><strong>Role:</strong> {user.role}</p>
-            <p><strong>Graduation:</strong> {user.gradDate}</p>
             <p><strong>Email:</strong> {user.email}</p>
-            {user.linkedin && (
-              <a href={user.linkedin} target="_blank" rel="noopener noreferrer" className="linkedin-link">
-                LinkedIn Profile
-              </a>
-            )}
+            <p><strong>Join Date:</strong> {new Date(user.joinDate).toLocaleDateString()}</p>
           </div>
         ))}
       </div>

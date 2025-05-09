@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:8080/api/v1";
+const API_BASE_URL = "http://localhost:8081/mlservlet/api";
 const CLIENT_BASE_URL = "http://localhost:5173";
 
 const api = axios.create({
